@@ -12,9 +12,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 WORKDIR /app
 
 # gradlew 및 그 외 필요한 파일들을 이미지에 복사
-COPY gradlew  backend/gradlew.bat backend/gradle /app/
+COPY gradlew gradlew.bat backend/gradle /app/
 COPY gradle /app/gradle
-COPY build.gradle  backend/settings.gradle /app/
+COPY build.gradle  settings.gradle /app/
 COPY src /app/src/
 
 # 'gradle/wrapper' 디렉토리에서 필요한 파일 추가

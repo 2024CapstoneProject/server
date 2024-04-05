@@ -20,10 +20,12 @@ public class AudioController {
 private final OpenAIClientService openAIClientService;
 
 
-    @PostMapping(value = "/transcription", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/transcription/test", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public WhisperTranscriptionResponse createTranscription(@ModelAttribute TranscriptionRequest transcriptionRequest){
         return openAIClientService.createTranscription(transcriptionRequest);
     }
+
+
 
 
 

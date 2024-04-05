@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ChatResponse {
 
-    private String text;
+    private String question;
 }

@@ -18,3 +18,4 @@ services:
       - ./gradlew.bat:/app/gradlew.bat
       - ./build.gradle:/app/build.gradle
       - ./settings.gradle:/app/settings.gradle
+    command: /bin/sh -c "while true; do sleep 30; done"

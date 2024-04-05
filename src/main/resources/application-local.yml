@@ -18,6 +18,7 @@ openai-service:
     chat-url: /chat/completions
     create-transcription-url: /audio/transcriptions
 
+
 springdoc:
   swagger-ui:
 
@@ -34,5 +35,3 @@ springdoc:
   cache:
     disabled: true
 
-server:
-  port: 9000

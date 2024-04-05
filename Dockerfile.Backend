@@ -12,7 +12,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 WORKDIR /app
 
 # gradlew 및 그 외 필요한 파일들을 이미지에 복사
-COPY gradlew gradlew.bat backend/gradle /app/
+COPY gradlew gradlew.bat gradle /app/
 COPY gradle /app/gradle
 COPY build.gradle  settings.gradle /app/
 COPY src /app/src/
@@ -34,4 +34,5 @@ WORKDIR /app
 COPY --from=build /app/build/libs/*.jar /app/app.jar
 
 # 애플리케이션 실행 명령 설정
-ENTRYPOINT ["java","-jar","/app/app.jar"]
+#ENTRYPOINT ["java","-jar","/app/app.jar"]
+CMD ["java","-jar","/app/app.jar"]

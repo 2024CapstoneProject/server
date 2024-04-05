@@ -1,0 +1,24 @@
+version: '3.3'
+
+services:
+  backend:
+    stdin_open: true
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile.Backend
+    container_name: kiosk-backend-1
+  # environment:
+
+    ports:
+      - "9000:9000"
+    volumes:
+      - "../src:/app/src"
+      - "../gradle:/app/gradle"
+      - "../build:/app/build"
+      - "../gradlew:/app/gradlew"
+      - "../gradlew.bat:/app/gradlew.bat"
+      - "../build.gradle:/app/build.gradle"
+      - "../settings.gradle:/app/settings.gradle"
+  #  env_file:
+   #   - .env

@@ -13,12 +13,12 @@ services:
     ports:
       - "9000:9000"
     volumes:
-      - "../src:/app/src"
-      - "../gradle:/app/gradle"
-      - "../build:/app/build"
-      - "../gradlew:/app/gradlew"
-      - "../gradlew.bat:/app/gradlew.bat"
-      - "../build.gradle:/app/build.gradle"
-      - "../settings.gradle:/app/settings.gradle"
+      - "src:/app/src"
+      - "gradle:/app/gradle"
+      - "build:/app/build"
+      - "gradlew:/app/gradlew"
+      - "gradlew.bat:/app/gradlew.bat"
+      - "build.gradle:/app/build.gradle"
+      - "settings.gradle:/app/settings.gradle"
   #  env_file:
    #   - .env

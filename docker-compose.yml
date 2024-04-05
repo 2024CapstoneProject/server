@@ -5,8 +5,8 @@ services:
     stdin_open: true
     tty: true
     build:
-      context: docker
-      dockerfile: docker/Dockerfile.Backend
+      context: .
+      dockerfile: Dockerfile.Backend
     container_name: kiosk-backend-1
   # environment:
 

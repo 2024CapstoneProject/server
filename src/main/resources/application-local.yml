@@ -6,7 +6,7 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
   datasource:
-    url: jdbc:postgresql://118.67.135.211/kiosk
+    url: jdbc:postgresql://118.67.135.211:5432/kiosk
     username: kiosk
     password: zpshrzzang
     driver-class-name: org.postgresql.Driver

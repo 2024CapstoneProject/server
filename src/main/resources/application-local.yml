@@ -5,6 +5,15 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  datasource:
+    url: jdbc:postgresql://118.67.135.211:5432/kiosk
+    username: kiosk
+    password: zpshrzzang
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate.ddl-auto: update
+    generate-ddl: true
+    show-sql: false
 
 openai-service:
   api-key: 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

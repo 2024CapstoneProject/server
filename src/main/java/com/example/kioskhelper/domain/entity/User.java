@@ -1,4 +1,5 @@
 package com.example.kioskhelper.domain.entity;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,5 +21,11 @@ public class User {
     public User(){
         this.name = "test";
         this.email = "test@gmail.com";
+    }
+
+    @Builder
+    public User(String name, String email) {
+        this.name = name;
+        this.email = email;
     }
 }

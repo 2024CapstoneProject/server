@@ -2,6 +2,8 @@ package com.example.kioskhelper.domain.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -17,6 +19,7 @@ public class UserLocation {
 
     @ManyToOne
     @JoinColumn(name = "user_id") // 외래 키를 지정
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user; // 사용자 엔티티와의 관계 설정
 
     private Double latitude; // 위도

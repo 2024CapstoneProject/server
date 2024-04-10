@@ -1,6 +1,9 @@
 package com.example.kioskhelper.domain.entity;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,10 +23,12 @@ public class Protector {
 
     @ManyToOne
     @JoinColumn(name = "guardian_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User guardian;
 
     @ManyToOne
     @JoinColumn(name = "ward_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User ward;
 
     @Enumerated(EnumType.STRING)
@@ -36,5 +41,12 @@ public class Protector {
 
     public enum Status {
         PENDING, ACCEPTED, DECLINED
+    }
+
+    @Builder
+    public Protector(User guardian, User ward, Status status) {
+        this.guardian = guardian;
+        this.ward = ward;
+        this.status = status;
     }
 }

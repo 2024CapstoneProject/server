@@ -19,6 +19,8 @@ public class UserLocationController {
 
     @PostMapping("")
     public ResponseEntity<Void> saveUserLocation(@RequestBody UserLocation location) {
+        System.out.println(location.getUser().getId());
+        System.out.println(location.getLatitude());
         service.saveUserLocation(location);
         return ResponseEntity.ok().build();
     }

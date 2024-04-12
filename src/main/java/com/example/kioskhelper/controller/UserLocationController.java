@@ -17,7 +17,7 @@ public class UserLocationController {
     private final UserService userService;
 
 
-    @PostMapping
+    @PostMapping("")
     public ResponseEntity<Void> saveUserLocation(@RequestBody UserLocation location) {
         service.saveUserLocation(location);
         return ResponseEntity.ok().build();

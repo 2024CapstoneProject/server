@@ -18,6 +18,7 @@ services:
       - ./gradlew.bat:/app/gradlew.bat
       - ./build.gradle:/app/build.gradle
       - ./settings.gradle:/app/settings.gradle
+    restart: always
     depends_on:
       - postgresql
     #command: /bin/sh -c "while true; do sleep 30; done"

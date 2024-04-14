@@ -1,5 +1,6 @@
 package com.example.kioskhelper.controller;
 
+import com.example.kioskhelper.domain.dto.LocationResponse;
 import com.example.kioskhelper.domain.entity.User;
 import com.example.kioskhelper.domain.entity.UserLocation;
 import com.example.kioskhelper.service.UserLocationService;
@@ -18,8 +19,8 @@ public class UserLocationController {
 
 
     @PostMapping("")
-    public ResponseEntity<Void> saveUserLocation(@RequestBody UserLocation location) {
-        System.out.println(location.getUser().getId());
+    public ResponseEntity<Void> saveUserLocation(@RequestBody LocationResponse location) {
+        System.out.println(location.getUserId());
         System.out.println(location.getLatitude());
         service.saveUserLocation(location);
         return ResponseEntity.ok().build();

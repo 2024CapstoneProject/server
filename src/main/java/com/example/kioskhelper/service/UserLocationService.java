@@ -1,5 +1,6 @@
 package com.example.kioskhelper.service;
 
+import com.example.kioskhelper.domain.dto.LocationResponse;
 import com.example.kioskhelper.domain.entity.Protector;
 import com.example.kioskhelper.domain.entity.User;
 import com.example.kioskhelper.domain.entity.UserLocation;
@@ -27,11 +28,11 @@ public class UserLocationService {
 
 
 
-    public void saveUserLocation(UserLocation location) {
+    public void saveUserLocation(LocationResponse location) {
 
 
 
-        User user = userRepository.findById(location.getUser().getId()).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        User user = userRepository.findById(location.getUserId()).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
         UserLocation locations = new UserLocation();
         locations.setUser(user);
         locations.setLatitude(location.getLatitude());

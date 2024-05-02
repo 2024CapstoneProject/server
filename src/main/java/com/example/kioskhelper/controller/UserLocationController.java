@@ -1,7 +1,10 @@
 package com.example.kioskhelper.controller;
 
+import com.example.kioskhelper.domain.dto.FcmRequestDto;
+import com.example.kioskhelper.domain.dto.LocationResponse;
 import com.example.kioskhelper.domain.entity.User;
 import com.example.kioskhelper.domain.entity.UserLocation;
+import com.example.kioskhelper.service.FirebaseInitialization;
 import com.example.kioskhelper.service.UserLocationService;
 import com.example.kioskhelper.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +19,13 @@ public class UserLocationController {
     private final UserLocationService service;
     private final UserService userService;
 
+    private final FirebaseInitialization firebaseInitialization;
 
-    @PostMapping
-    public ResponseEntity<Void> saveUserLocation(@RequestBody UserLocation location) {
+
+    @PostMapping("")
+    public ResponseEntity<Void> saveUserLocation(@RequestBody LocationResponse location) {
+        System.out.println(location.getUserId());
+        System.out.println(location.getLatitude());
         service.saveUserLocation(location);
         return ResponseEntity.ok().build();
     }
@@ -32,5 +39,12 @@ public class UserLocationController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PostMapping("/send-notification")
+    public ResponseEntity<Void> sendLocationRequestPushNotification(@RequestBody FcmRequestDto dto) {
+
+        firebaseInitialization.sendLocationRequestPushNotification(dto);
+        return ResponseEntity.ok().build();
     }
 }

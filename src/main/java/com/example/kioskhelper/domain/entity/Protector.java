@@ -23,7 +23,6 @@ public class Protector {
 
     @ManyToOne
     @JoinColumn(name = "guardian_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private User guardian;
 
     @ManyToOne
@@ -41,6 +40,9 @@ public class Protector {
 
     public enum Status {
         PENDING, ACCEPTED, DECLINED
+    }
+
+    public Protector() {
     }
 
     @Builder

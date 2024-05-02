@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import com.google.firebase.messaging.Notification;
-import java.io.FileInputStream;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -25,7 +25,7 @@ public class FirebaseInitialization {
     public void initialization() {
         try {
             // ClassPathResource를 사용하여 serviceAccountKey.json 파일의 InputStream을 얻습니다.
-            ClassPathResource resource = new ClassPathResource("serviceAccountKey.json");
+            ClassPathResource resource = new ClassPathResource("google-cloud.json");
             InputStream serviceAccount = resource.getInputStream();
 
             // FirebaseOptions 객체를 생성합니다.

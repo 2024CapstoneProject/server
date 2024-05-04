@@ -39,12 +39,12 @@ public class ChatController {
     // 여기서는 예시로 고정된 응답을 반환합니다.
     // 실제 구현에서는 이 부분에 챗봇 서비스를 연동하십시오.
     @GetMapping("/ask")
-    public ChatResponse askChatbot(@RequestParam String question) {
+    public ResponseEntity<ChatResponse> askChatbot(@RequestParam String question) {
 
         String response=chatbotService.sendMessage(question);
         // 챗봇 서비스로부터 응답을 받아오는 로직을 구현
         String botResponse = response; // 예시 응답
-        return new ChatResponse(botResponse);
+        return ResponseEntity.ok(new ChatResponse(botResponse));
     }
     @GetMapping("/test/ask")
     public ResponseEntity<ChatResponse> askChatbotTest(@RequestParam String question) {

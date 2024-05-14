@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -21,8 +22,10 @@ import javax.crypto.spec.SecretKeySpec;
 
 @Service
 public class ChatbotProc {
-    String apiURL = "https://463v51fz9e.apigw.ntruss.com/custom/v1/14086/d99cff6fc8a2f1fbc39e1c8f4f9eb28d692c40900bbb3486b426a13da37b79a0";
-    String secretKey = "aWlSUG53RVVMdkNERWZZT3FITnpXTW9QVVlRREdURks=";
+    @Value("${chatbot.api.url}")
+    String apiURL;
+    @Value("${chatbot.api.key}")
+    String secretKey;
 
     public String sendMessage(String voiceMessage) {
         String chatbotMessage = "";

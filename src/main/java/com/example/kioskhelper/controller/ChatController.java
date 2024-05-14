@@ -30,7 +30,7 @@ public class ChatController {
     public ChatResponse createTranscriptions(@ModelAttribute TranscriptionRequest transcriptionRequest){
 
          String text= openAIClientService.createTranscription(transcriptionRequest).getText();
-        String botResponse=chatbotService.sendMessage(text);
+        String botResponse=chatbotService.sendMessage(text,false);
         return new ChatResponse(botResponse);
     }
 
@@ -39,9 +39,14 @@ public class ChatController {
     // 여기서는 예시로 고정된 응답을 반환합니다.
     // 실제 구현에서는 이 부분에 챗봇 서비스를 연동하십시오.
     @GetMapping("/ask")
-    public ResponseEntity<ChatResponse> askChatbot(@RequestParam String question) {
+    public ResponseEntity<ChatResponse> askChatbot(@RequestParam String question,
+                                                   @RequestParam(value ="reset", defaultValue = "false") boolean reset) {
 
-        String response=chatbotService.sendMessage(question);
+        if(question.equals("true")
+        ){
+            reset=true;
+        }
+        String response=chatbotService.sendMessage(question,reset);
         // 챗봇 서비스로부터 응답을 받아오는 로직을 구현
         String botResponse = response; // 예시 응답
         return ResponseEntity.ok(new ChatResponse(botResponse));

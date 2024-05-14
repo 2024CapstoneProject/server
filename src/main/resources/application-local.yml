@@ -43,4 +43,7 @@ springdoc:
       enabled: true
   cache:
     disabled: true
-
+chatbot:
+  api:
+    url: ${chatbot.api.url}
+    key: ${chatbot.api.key}

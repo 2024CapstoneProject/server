@@ -16,9 +16,13 @@ import java.nio.charset.StandardCharsets;
 import java.security.Timestamp;
 import java.util.Date;
 import java.util.Base64;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+
+import java.util.UUID;
 
 @Service
 public class ChatbotProc {
@@ -27,12 +31,28 @@ public class ChatbotProc {
     @Value("${chatbot.api.key}")
     String secretKey;
 
-    public String sendMessage(String voiceMessage) {
+    private static final long SESSION_TIMEOUT = 60000*10; // 10분 -> 추후 20분으로
+    private Map<String, Long> sessionLastActive = new ConcurrentHashMap<>();
+
+    private String userId = UUID.randomUUID().toString(); // 초기 userId 생성
+
+    public String sendMessage(String voiceMessage,boolean reset) {
+
+
+        if (reset) {
+            userId = resetSession(userId); // 새로운 세션 시작
+        } else if (!sessionLastActive.containsKey(userId) || isSessionExpired(userId)) {
+            userId = resetSession(userId); // 세션 만료 시 새로운 세션 시작
+        }
+
         String chatbotMessage = "";
 
         try {
+            // Check for session expiration and reset if necessary
+
+
             URL url = new URL(apiURL);
-            String message = getReqMessage(voiceMessage);
+            String message = getReqMessage(voiceMessage, userId);
             String encodeBase64String = makeSignature(message, secretKey);
 
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -50,25 +70,44 @@ public class ChatbotProc {
             if (responseCode == 200) {
                 ObjectMapper mapper = new ObjectMapper();
                 mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
                 ChatbotResponse response = mapper.readValue(con.getInputStream(), ChatbotResponse.class);
-                StringBuilder descriptions = new StringBuilder();
-                response.getBubbles().forEach(bubble -> {
-                    if (bubble.getData() != null && bubble.getData().getDescription() != null) {
-                        descriptions.append(bubble.getData().getDescription()).append("\n");
-                    }
-                });
-                chatbotMessage = descriptions.toString();
-                System.out.println("Description extracted: " + chatbotMessage);
+                chatbotMessage = extractDescriptions(response);
             } else {
                 chatbotMessage = "Error: " + readErrorResponse(con);
-                System.out.println("Error response: " + chatbotMessage);
             }
         } catch (Exception e) {
             System.out.println("Error in sendMessage: " + e.getMessage());
         }
 
+        // Update the last active time for the current session
+        sessionLastActive.put(userId, System.currentTimeMillis());
         return chatbotMessage;
+    }
+
+    private String resetSession(String oldUserId) {
+        // Generate a new UUID for the user
+        String newUserId = UUID.randomUUID().toString();
+        System.out.println("Session reset for userId: " + oldUserId + ", new userId: " + newUserId);
+
+        // Reset the session last active time for the new user ID
+        sessionLastActive.remove(oldUserId); // Optional: remove old session data
+        sessionLastActive.put(newUserId, System.currentTimeMillis());
+
+        return newUserId;
+    }
+
+    private boolean isSessionExpired(String userId) {
+        return System.currentTimeMillis() - sessionLastActive.getOrDefault(userId, 0L) > SESSION_TIMEOUT;
+    }
+
+    private String extractDescriptions(ChatbotResponse response) {
+        StringBuilder descriptions = new StringBuilder();
+        response.getBubbles().forEach(bubble -> {
+            if (bubble.getData() != null && bubble.getData().getDescription() != null) {
+                descriptions.append(bubble.getData().getDescription()).append("\n");
+            }
+        });
+        return descriptions.toString();
     }
 
     private String readErrorResponse(HttpURLConnection con) throws IOException {
@@ -97,13 +136,13 @@ public class ChatbotProc {
         return encodeBase64String;
     }
 
-    public static String getReqMessage(String voiceMessage) {
+    public static String getReqMessage(String voiceMessage, String sessionId) {
         String requestBody = "";
         try {
             JSONObject obj = new JSONObject();
             long timestamp = System.currentTimeMillis();
             obj.put("version", "v2");
-            obj.put("userId", "U47b00b58c90f8e47428af8b7bddc1231heo2");
+            obj.put("userId", sessionId);
             obj.put("timestamp", timestamp);
 
             JSONObject bubbles_obj = new JSONObject();
@@ -125,5 +164,6 @@ public class ChatbotProc {
         }
         return requestBody;
     }
+
 
 }

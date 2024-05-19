@@ -3,6 +3,7 @@ package com.example.kioskhelper.service;
 import com.example.kioskhelper.domain.dto.chatbotResponse.ChatbotResponse;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,11 +26,14 @@ import javax.crypto.spec.SecretKeySpec;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class ChatbotProc {
     @Value("${chatbot.api.url}")
     String apiURL;
     @Value("${chatbot.api.key}")
     String secretKey;
+
+    private final ChatService chatService;
 
     private static final long SESSION_TIMEOUT = 60000*10; // 10분 -> 추후 20분으로
     private Map<String, Long> sessionLastActive = new ConcurrentHashMap<>();
@@ -40,9 +44,8 @@ public class ChatbotProc {
 
 
         if (reset) {
+            chatService.resetChat(userId);
             userId = resetSession(userId); // 새로운 세션 시작
-        } else if (!sessionLastActive.containsKey(userId) || isSessionExpired(userId)) {
-            userId = resetSession(userId); // 세션 만료 시 새로운 세션 시작
         }
 
         String chatbotMessage = "";
@@ -81,6 +84,7 @@ public class ChatbotProc {
 
         // Update the last active time for the current session
         sessionLastActive.put(userId, System.currentTimeMillis());
+        chatService.saveChat(userId, voiceMessage, chatbotMessage);
         return chatbotMessage;
     }
 

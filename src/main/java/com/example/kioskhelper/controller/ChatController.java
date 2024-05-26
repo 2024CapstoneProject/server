@@ -88,9 +88,10 @@ public class ChatController {
 
 
     @PostMapping("reset")
-    public ResponseEntity<String> resetChat(@RequestParam(value = "sessionId",defaultValue = "testUser") String sessionId) {
+    public ResponseEntity<Void> resetChat(@RequestParam(value = "sessionId",defaultValue = "testUser") String sessionId) {
         chatService.resetChat(sessionId);
-        return ResponseEntity.ok("Chat reset for sessionId: " + sessionId);
+        System.out.println("reset chat ----- "+ sessionId);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("reset/all")

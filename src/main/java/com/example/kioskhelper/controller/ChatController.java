@@ -90,9 +90,9 @@ public class ChatController {
 
 
     @GetMapping("/list")
-    public ResponseEntity<List<ChatRoomDto>> getChatList(@RequestParam(value = "userId",defaultValue = "testUser") String userId) {
+    public ResponseEntity<List<ChatRoomDto>> getChatList(@RequestParam(value = "userId",defaultValue = "testUser") String userId,  @RequestHeader("X-USER-ID") String uid) {
         User user =getAuthenticatedUser();
-        List<ChatRoomDto> chatList = chatService.getChatList(user.getUid());
+        List<ChatRoomDto> chatList = chatService.getChatList(user);
         return ResponseEntity.ok(chatList);
     }
 

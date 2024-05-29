@@ -2,6 +2,7 @@ package com.example.kioskhelper.service;
 
 import com.example.kioskhelper.domain.dto.ChatRoomDto;
 import com.example.kioskhelper.domain.entity.Chat;
+import com.example.kioskhelper.domain.entity.User;
 import com.example.kioskhelper.repository.ChatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,8 +39,8 @@ public class ChatService {
         }).toList();
     }
 
-    public List<ChatRoomDto> getChatList(String userId) {
-         List<Chat> chatList = chatRepository.findBySessionId(userId);
+    public List<ChatRoomDto> getChatList(User user) {
+         List<Chat> chatList = chatRepository.findByUser(user);
         //List<Chat> chatList = chatRepository.findAll();
         return chatList.stream().map(chat -> {
             ChatRoomDto chatRoomDto = new ChatRoomDto();

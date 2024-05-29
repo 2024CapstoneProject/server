@@ -20,7 +20,7 @@ public class UserService {
 
     public User findUserByName(String uid) {
         String encryptedUid = encryptionService.encrypt(uid);
-        return userRepository.findByName(encryptedUid);
+        return userRepository.findByUid(encryptedUid);
     }
 
     public void saveUser(User user) {

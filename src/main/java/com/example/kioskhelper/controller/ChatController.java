@@ -1,9 +1,11 @@
 package com.example.kioskhelper.controller;
 
+import com.example.kioskhelper.auth.utils.AuthUtils;
 import com.example.kioskhelper.domain.dto.ChatResponse;
 import com.example.kioskhelper.domain.dto.ChatRoomDto;
 import com.example.kioskhelper.domain.dto.TranscriptionRequest;
 import com.example.kioskhelper.domain.dto.WhisperTranscriptionResponse;
+import com.example.kioskhelper.domain.entity.User;
 import com.example.kioskhelper.service.ChatService;
 import com.example.kioskhelper.service.ChatbotProc;
 import com.example.kioskhelper.service.OpenAIClientService;
@@ -14,6 +16,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.example.kioskhelper.auth.utils.AuthUtils.getAuthenticatedUser;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,6 +31,7 @@ public class ChatController {
     private final ChatbotProc chatbotService;
 
     private final ChatService chatService;
+
 
 
     @PostMapping(value = "/transcription", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -79,17 +84,15 @@ public class ChatController {
     @GetMapping("/list/test")
     public ResponseEntity<List<ChatRoomDto>> getChatListTest(@RequestParam(value = "userId",defaultValue = "testUser") String userId) {
 
-        List<ChatRoomDto> chatList = chatService.getChatList(userId);
+        List<ChatRoomDto> chatList = chatService.getChatListTest(userId);
         return ResponseEntity.ok(chatList);
     }
 
 
     @GetMapping("/list")
-    public ResponseEntity<List<ChatRoomDto>> getChatList(@RequestParam(value = "userId",defaultValue = "testUser") String userId,  @RequestHeader("Authorization") String uid) {
-        System.out.println("uid: "+uid);
-
-
-        List<ChatRoomDto> chatList = chatService.getChatList(userId);
+    public ResponseEntity<List<ChatRoomDto>> getChatList(@RequestParam(value = "userId",defaultValue = "testUser") String userId) {
+        User user =getAuthenticatedUser();
+        List<ChatRoomDto> chatList = chatService.getChatList(user.getUid());
         return ResponseEntity.ok(chatList);
     }
 

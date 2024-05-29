@@ -2,6 +2,8 @@ package com.example.kioskhelper.config;
 
 
 import com.example.kioskhelper.auth.filter.CustomAuthorizationFilter;
+import com.example.kioskhelper.repository.UserRepository;
+import com.example.kioskhelper.service.EncryptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,15 +22,25 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final EncryptionService encryptionService;
+
+    private final UserRepository userRepository;
+
+    private static final String [] PERMIT_ALL_LIST = {
+            "/api/auth/login",
+            "/api/swagger.json",
+            "/swagger-ui/index.html",
+    };
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/api/auth/login").permitAll()
-                .antMatchers("*").permitAll()
+                .antMatchers("/api/chat/list").authenticated()
                 .anyRequest().permitAll()
                 .and()
-                .addFilterAfter(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAfter(new CustomAuthorizationFilter(encryptionService,userRepository), UsernamePasswordAuthenticationFilter.class);
 
         http.cors().configurationSource(corsConfigurationSource());
 

@@ -12,6 +12,7 @@ services:
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       chatbot.api.url: ${chatbot_api_url}
       chatbot.api.key : ${chatbot_api_key}
+      secret.key: ${secret_key}
     ports:
       - "9000:9000"
     volumes:

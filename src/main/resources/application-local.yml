@@ -47,3 +47,5 @@ chatbot:
   api:
     url: ${chatbot.api.url}
     key: ${chatbot.api.key}
+secret:
+  key: ${secret.key}

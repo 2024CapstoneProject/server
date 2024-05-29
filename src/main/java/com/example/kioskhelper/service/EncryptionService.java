@@ -1,6 +1,8 @@
 package com.example.kioskhelper.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -10,24 +12,23 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 
-@Service
-@RequiredArgsConstructor
+@Component
 public class EncryptionService {
-
+    @Value("${secret.key}")
+    private String SECRET_KEY_STRING;// 32 bytes for AES-256
     private SecretKey secretKey;
+    private Cipher cipher;
 
     @PostConstruct
     public void init() throws Exception {
-        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
-        keyGenerator.init(256);
-        secretKey = keyGenerator.generateKey();
+        secretKey = new SecretKeySpec(SECRET_KEY_STRING.getBytes(), "AES");
+        cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
     }
 
     public String encrypt(String strToEncrypt) {
         try {
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-            return Base64.getEncoder().encodeToString(cipher.doFinal(strToEncrypt.getBytes("UTF-8")));
+            return Base64.getEncoder().encodeToString(cipher.doFinal(strToEncrypt.getBytes()));
         } catch (Exception e) {
             throw new RuntimeException("Error while encrypting: " + e.toString());
         }
@@ -35,7 +36,6 @@ public class EncryptionService {
 
     public String decrypt(String strToDecrypt) {
         try {
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
             cipher.init(Cipher.DECRYPT_MODE, secretKey);
             return new String(cipher.doFinal(Base64.getDecoder().decode(strToDecrypt)));
         } catch (Exception e) {

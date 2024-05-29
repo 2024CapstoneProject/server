@@ -1,4 +1,5 @@
 package com.example.kioskhelper.domain.entity;
+import com.example.kioskhelper.domain.etc.Role;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,18 +15,21 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name; // uid
+    private String uid; // uid
     private String email; // 사용자 이메일
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     //test용 User 생성자
     public User(){
-        this.name = "test_UID";
+        this.uid = "test_UID";
         this.email = "test@gmail.com";
     }
 
     @Builder
-    public User(String name, String email) {
-        this.name = name;
+    public User(String uid, String email) {
+        this.uid =uid;
         this.email = email;
+        this.role = Role.USER;
     }
 }

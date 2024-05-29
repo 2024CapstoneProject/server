@@ -24,13 +24,13 @@ public class UserController {
     public void saveUser() {
         // 사용자 정보를 저장하는 로직을 구현
         User gaurdian1= User.builder()
-                .name("gaurdian1")
+                .uid("gaurdian1")
                 .email("test@gmail.com")
                 .build();
         userService.saveUser(gaurdian1);
 
         User ward1= User.builder()
-                .name("ward1")
+                .uid("ward1")
                 .email("test@gmail.com")
                 .build();
         userService.saveUser(ward1);

@@ -26,7 +26,7 @@ public class AuthController {
 
         String encryptedUid = encryptionService.encrypt(uid);
         String encryptedEmail = encryptionService.encrypt(email);
-        if(userRepository.findByName(encryptedUid) != null){
+        if(userRepository.findByUid(encryptedUid) != null){
             return ResponseEntity.badRequest().build();
         }
         User user = new User(encryptedUid, encryptedEmail);

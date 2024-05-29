@@ -14,12 +14,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name; // 사용자 이름
+    private String name; // uid
     private String email; // 사용자 이메일
 
     //test용 User 생성자
     public User(){
-        this.name = "test";
+        this.name = "test_UID";
         this.email = "test@gmail.com";
     }
 

@@ -10,6 +10,7 @@ import com.example.kioskhelper.service.OpenAIClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -74,14 +75,11 @@ public class ChatController {
         return ResponseEntity.ok(botResponse);
     }
 
-    @GetMapping("list/test")
-    public ResponseEntity<List<ChatRoomDto>> getChatListTest(@RequestParam(value = "userId",defaultValue = "testUser") String userId) {
-        List<ChatRoomDto> chatList = chatService.getChatListTest(userId);
-        return ResponseEntity.ok(chatList);
-    }
 
-    @GetMapping("list")
-    public ResponseEntity<List<ChatRoomDto>> getChatList(@RequestParam(value = "userId",defaultValue = "testUser") String userId) {
+    @GetMapping("/list/test")
+    public ResponseEntity<List<ChatRoomDto>> getChatList(@RequestParam(value = "userId",defaultValue = "testUser") String userId,  @RequestHeader("Authorization") String uid) {
+       System.out.println("uid: "+uid);
+
         List<ChatRoomDto> chatList = chatService.getChatList(userId);
         return ResponseEntity.ok(chatList);
     }

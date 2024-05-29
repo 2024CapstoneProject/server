@@ -77,12 +77,21 @@ public class ChatController {
 
 
     @GetMapping("/list/test")
-    public ResponseEntity<List<ChatRoomDto>> getChatList(@RequestParam(value = "userId",defaultValue = "testUser") String userId,  @RequestHeader("Authorization") String uid) {
-       System.out.println("uid: "+uid);
+    public ResponseEntity<List<ChatRoomDto>> getChatListTest(@RequestParam(value = "userId",defaultValue = "testUser") String userId) {
 
         List<ChatRoomDto> chatList = chatService.getChatList(userId);
         return ResponseEntity.ok(chatList);
     }
+
+
+    @GetMapping("/list")
+    public ResponseEntity<List<ChatRoomDto>> getChatList(@RequestParam(value = "userId",defaultValue = "testUser") String userId,  @RequestHeader("Authorization") String uid) {
+        System.out.println("uid: "+uid);
+
+        List<ChatRoomDto> chatList = chatService.getChatList(userId);
+        return ResponseEntity.ok(chatList);
+    }
+
 
 
     @PostMapping("reset")

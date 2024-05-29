@@ -22,10 +22,13 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestParam String uid, @RequestParam String email) {
         System.out.println("uid: " + uid);
+        System.out.println("email: " + email);
+
         String encryptedUid = encryptionService.encrypt(uid);
-
         String encryptedEmail = encryptionService.encrypt(email);
-
+        if(userRepository.findByName(encryptedUid) != null){
+            return ResponseEntity.badRequest().build();
+        }
         User user = new User(encryptedUid, encryptedEmail);
         userRepository.save(user);
 

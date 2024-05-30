@@ -2,6 +2,7 @@ package com.example.kioskhelper.service;
 
 import com.example.kioskhelper.domain.dto.chatbotResponse.ChatbotResponse;
 import com.example.kioskhelper.domain.entity.User;
+import com.example.kioskhelper.repository.ChatRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,8 @@ public class ChatbotProc {
     private static final long SESSION_TIMEOUT = 60000*10; // 10분 -> 추후 20분으로
     private Map<String, Long> sessionLastActive = new ConcurrentHashMap<>();
 
+    private final ChatRepository chatRepo;
+
 
 
     public String sendMessage(User user, String voiceMessage, boolean reset) {
@@ -49,6 +52,10 @@ public class ChatbotProc {
         if (reset) {
             chatService.resetChat(user);
             userId = resetSession(userId); // 새로운 세션 시작
+        }
+        else{
+             userId=chatRepo.findRecentChat(user);
+
         }
 
         String chatbotMessage = "";

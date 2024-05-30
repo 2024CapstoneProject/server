@@ -17,7 +17,7 @@ import java.util.Map;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class UserPrincipal implements UserDetails {
-
+    private final Long id;
     private final String uid;
     private final String email;
     private final Role role;
@@ -62,6 +62,7 @@ public class UserPrincipal implements UserDetails {
 
     public User toUser(){
       User user = User.builder()
+              .id(id)
               .uid(uid)
               .email(email)
               .build();

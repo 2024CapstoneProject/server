@@ -27,8 +27,15 @@ public class User {
     }
 
     @Builder
-    public User(String uid, String email) {
+    public User(Long id,String uid, String email) {
+        this.id = id;
         this.uid =uid;
+        this.email = email;
+        this.role = Role.USER;
+    }
+
+    public User(String uid, String email) {
+        this.uid = uid;
         this.email = email;
         this.role = Role.USER;
     }

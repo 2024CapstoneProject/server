@@ -1,6 +1,7 @@
 package com.example.kioskhelper.service;
 
 import com.example.kioskhelper.domain.dto.chatbotResponse.ChatbotResponse;
+import com.example.kioskhelper.domain.entity.User;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Base64;
 import java.util.Map;
@@ -38,13 +41,13 @@ public class ChatbotProc {
     private static final long SESSION_TIMEOUT = 60000*10; // 10분 -> 추후 20분으로
     private Map<String, Long> sessionLastActive = new ConcurrentHashMap<>();
 
-    private String userId = UUID.randomUUID().toString(); // 초기 userId 생성
 
-    public String sendMessage(String voiceMessage,boolean reset) {
 
+    public String sendMessage(User user, String voiceMessage, boolean reset) {
+        String userId = user.getUid();
 
         if (reset) {
-            chatService.resetChat(userId);
+            chatService.resetChat(user);
             userId = resetSession(userId); // 새로운 세션 시작
         }
 
@@ -84,13 +87,16 @@ public class ChatbotProc {
 
         // Update the last active time for the current session
         sessionLastActive.put(userId, System.currentTimeMillis());
-        chatService.saveChat(userId, voiceMessage, chatbotMessage);
+        chatService.saveChat(user, userId, voiceMessage, chatbotMessage);
         return chatbotMessage;
     }
 
     private String resetSession(String oldUserId) {
         // Generate a new UUID for the user
-        String newUserId = UUID.randomUUID().toString();
+        String uuid = UUID.randomUUID().toString();
+
+
+        String newUserId = oldUserId+uuid;
         System.out.println("Session reset for userId: " + oldUserId + ", new userId: " + newUserId);
 
         // Reset the session last active time for the new user ID

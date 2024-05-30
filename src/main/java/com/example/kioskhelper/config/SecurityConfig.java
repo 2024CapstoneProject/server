@@ -37,7 +37,7 @@ public class SecurityConfig {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/api/auth/login").permitAll()
-                .antMatchers("/api/chat/list").authenticated()
+                .antMatchers("/api/chat/**").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .addFilterAfter(new CustomAuthorizationFilter(encryptionService,userRepository), UsernamePasswordAuthenticationFilter.class);

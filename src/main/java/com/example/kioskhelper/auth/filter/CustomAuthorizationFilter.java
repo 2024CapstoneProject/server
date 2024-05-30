@@ -37,7 +37,6 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
         String uid = request.getHeader("X-USER-ID");
-        System.out.println("Authorization Header: " + uid); // 로그 추가
         if (uid != null) {
             String encryptedUid = encryptionService.encrypt(uid);
             // UserRepository를 통해 사용자 정보 조회
@@ -46,9 +45,8 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 throw new UsernameNotFoundException("User not found");
             }
 
-            UserPrincipal userPrincipal = new UserPrincipal(user.getUid(), user.getEmail(), user.getRole(), new ArrayList<>());
+            UserPrincipal userPrincipal = new UserPrincipal(user.getId(),user.getUid(), user.getEmail(), user.getRole(), new ArrayList<>());
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
-            System.out.println("Authentication: " + authentication); // 로그 추가
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);

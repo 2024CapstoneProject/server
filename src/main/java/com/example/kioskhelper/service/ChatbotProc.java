@@ -19,15 +19,11 @@ import java.nio.charset.StandardCharsets;
 import java.security.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Base64;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -54,8 +50,10 @@ public class ChatbotProc {
             userId = resetSession(userId); // 새로운 세션 시작
         }
         else{
-             userId=chatRepo.findRecentChat(user);
-
+            List<String> backupUserId = chatRepo.findRecentChat(user);
+            if(backupUserId.size()>0){
+                userId = backupUserId.get(0);
+            }
         }
 
         String chatbotMessage = "";

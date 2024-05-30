@@ -27,4 +27,11 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
 
     @Query("select c from Chat c where c.expired = false")
     List<Chat> findAll();
+    //가장 최근 대화 하나의 세션id 가져오기
+    @Query("select c.sessionId from Chat c where c.user =:user and c.expired = false order by c.createdAt desc")
+    String findRecentChat(User user);
+
+
+
+
 }

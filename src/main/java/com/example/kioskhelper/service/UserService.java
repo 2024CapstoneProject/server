@@ -11,10 +11,16 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User findUserByName(String name) {
-        User user = userRepository.findByName(name);
+    private final EncryptionService encryptionService;
 
-      return user;
+    public void saveUser(String uid, String email){
+        User user = new User(uid, email);
+        userRepository.save(user);
+    }
+
+    public User findUserByName(String uid) {
+        String encryptedUid = encryptionService.encrypt(uid);
+        return userRepository.findByUid(encryptedUid);
     }
 
     public void saveUser(User user) {

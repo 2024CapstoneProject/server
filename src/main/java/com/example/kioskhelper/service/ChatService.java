@@ -2,7 +2,9 @@ package com.example.kioskhelper.service;
 
 import com.example.kioskhelper.domain.dto.ChatRoomDto;
 import com.example.kioskhelper.domain.entity.Chat;
+import com.example.kioskhelper.domain.entity.User;
 import com.example.kioskhelper.repository.ChatRepository;
+import com.example.kioskhelper.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +15,11 @@ import java.util.List;
 public class ChatService {
 
     private final ChatRepository chatRepository;
-    public void saveChat(String userId, String voiceMessage, String chatbotMessage) {
+
+    public void saveChat(User user,String sessionId, String voiceMessage, String chatbotMessage) {
         Chat chat = Chat.builder()
-                .sessionId(userId)
+                .user(user)
+                .sessionId(sessionId)
                 .message(voiceMessage)
                 .response(chatbotMessage)
                 .createdAt(java.time.LocalDateTime.now())
@@ -38,8 +42,8 @@ public class ChatService {
         }).toList();
     }
 
-    public List<ChatRoomDto> getChatList(String userId) {
-         List<Chat> chatList = chatRepository.findBySessionId(userId);
+    public List<ChatRoomDto> getChatList(User user) {
+         List<Chat> chatList = chatRepository.findByUser(user);
         //List<Chat> chatList = chatRepository.findAll();
         return chatList.stream().map(chat -> {
             ChatRoomDto chatRoomDto = new ChatRoomDto();
@@ -51,8 +55,8 @@ public class ChatService {
         }).toList();
     }
 
-    public void resetChat(String sessionId) {
-        List<Chat> chatList = chatRepository.findBySessionId(sessionId);
+    public void resetChat(User user) {
+        List<Chat> chatList = chatRepository.findByUser(user);
         chatList.forEach(chat -> {
             chat.setExpired(true);
         });

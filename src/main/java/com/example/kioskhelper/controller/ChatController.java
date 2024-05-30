@@ -1,18 +1,23 @@
 package com.example.kioskhelper.controller;
 
+import com.example.kioskhelper.auth.utils.AuthUtils;
 import com.example.kioskhelper.domain.dto.ChatResponse;
 import com.example.kioskhelper.domain.dto.ChatRoomDto;
 import com.example.kioskhelper.domain.dto.TranscriptionRequest;
 import com.example.kioskhelper.domain.dto.WhisperTranscriptionResponse;
+import com.example.kioskhelper.domain.entity.User;
 import com.example.kioskhelper.service.ChatService;
 import com.example.kioskhelper.service.ChatbotProc;
 import com.example.kioskhelper.service.OpenAIClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.example.kioskhelper.auth.utils.AuthUtils.getAuthenticatedUser;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,17 +33,7 @@ public class ChatController {
     private final ChatService chatService;
 
 
-    @PostMapping(value = "/transcription", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public WhisperTranscriptionResponse createTranscription(@ModelAttribute TranscriptionRequest transcriptionRequest){
-        return openAIClientService.createTranscription(transcriptionRequest);
-    }
-    @GetMapping(value = "/transcription/ask", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ChatResponse createTranscriptions(@ModelAttribute TranscriptionRequest transcriptionRequest){
 
-         String text= openAIClientService.createTranscription(transcriptionRequest).getText();
-        String botResponse=chatbotService.sendMessage(text,false);
-        return new ChatResponse(botResponse);
-    }
 
 
 
@@ -52,45 +47,31 @@ public class ChatController {
         ){
             reset=true;
         }
-        String response=chatbotService.sendMessage(question,reset);
+        User user =getAuthenticatedUser();
+        String response=chatbotService.sendMessage(user,question,reset);
         // 챗봇 서비스로부터 응답을 받아오는 로직을 구현
         String botResponse = response; // 예시 응답
         return ResponseEntity.ok(new ChatResponse(botResponse));
     }
-    @GetMapping("/test/ask")
-    public ResponseEntity<ChatResponse> askChatbotTest(@RequestParam String question) {
-        // 챗봇 서비스로부터 응답을 받아오는 로직을 구현
-        String botResponse = question;
-        System.out.println("question: " + question);
-        return ResponseEntity.ok(new ChatResponse(botResponse));
-    }
-
-    @GetMapping("/test")
-    public ResponseEntity<String> askChatbotTests() {
-        // 챗봇 서비스로부터 응답을 받아오는 로직을 구현
-
-        String botResponse = "1234";
-        System.out.println("question: " + botResponse);
-        return ResponseEntity.ok(botResponse);
-    }
-
-    @GetMapping("list/test")
-    public ResponseEntity<List<ChatRoomDto>> getChatListTest(@RequestParam(value = "userId",defaultValue = "testUser") String userId) {
+    @GetMapping("/list/test")
+    public ResponseEntity<List<ChatRoomDto>> getChatListTest() {
+        User user =getAuthenticatedUser();
+        String userId = user.getUid();
         List<ChatRoomDto> chatList = chatService.getChatListTest(userId);
         return ResponseEntity.ok(chatList);
     }
 
-    @GetMapping("list")
-    public ResponseEntity<List<ChatRoomDto>> getChatList(@RequestParam(value = "userId",defaultValue = "testUser") String userId) {
-        List<ChatRoomDto> chatList = chatService.getChatList(userId);
+    @GetMapping("/list")
+    public ResponseEntity<List<ChatRoomDto>> getChatList() {
+        User user =getAuthenticatedUser();
+        List<ChatRoomDto> chatList = chatService.getChatList(user);
         return ResponseEntity.ok(chatList);
     }
 
-
     @PostMapping("reset")
-    public ResponseEntity<Void> resetChat(@RequestParam(value = "sessionId",defaultValue = "testUser") String sessionId) {
-        chatService.resetChat(sessionId);
-        System.out.println("reset chat ----- "+ sessionId);
+    public ResponseEntity<Void> resetChat() {
+        User user =getAuthenticatedUser();
+        chatService.resetChat(user);
         return ResponseEntity.ok().build();
     }
 
@@ -99,8 +80,6 @@ public class ChatController {
         chatService.resetAllChat();
         return ResponseEntity.ok("All chat reset");
     }
-
-
 
 
 }

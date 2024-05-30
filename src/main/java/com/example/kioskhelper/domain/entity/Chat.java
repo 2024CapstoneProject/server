@@ -27,7 +27,7 @@ public class Chat {
     @Column(columnDefinition = "TEXT")
     private String message;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(length = 2000)
     private String response;
 
     private LocalDateTime createdAt;

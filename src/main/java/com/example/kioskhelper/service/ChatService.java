@@ -16,7 +16,19 @@ public class ChatService {
 
     private final ChatRepository chatRepository;
 
-    public void saveChat(User user,String sessionId, String voiceMessage, String chatbotMessage) {
+    private final ChatGPTService chatGPTService;
+
+    private String answer="이 챗봇은 카페, 맥도날드, 버거킹 키오스크와 관련된 챗봇입니다.";
+
+    public String saveChat(User user,String sessionId, String voiceMessage, String chatbotMessage) {
+
+
+       if(chatbotMessage.contains(answer))
+       {
+           chatbotMessage= chatGPTService.getBotResponse(voiceMessage, user);
+       }
+
+
         Chat chat = Chat.builder()
                 .user(user)
                 .sessionId(sessionId)
@@ -27,6 +39,7 @@ public class ChatService {
                 .build();
 
         chatRepository.save(chat);
+        return chatbotMessage;
     }
 
     public List<ChatRoomDto> getChatListTest(String userId) {

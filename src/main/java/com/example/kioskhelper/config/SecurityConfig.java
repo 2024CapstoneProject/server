@@ -38,6 +38,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/api/auth/login").permitAll()
                 .antMatchers("/api/chat/**").authenticated()
+                .antMatchers("/api/gpt/**").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .addFilterAfter(new CustomAuthorizationFilter(encryptionService,userRepository), UsernamePasswordAuthenticationFilter.class);

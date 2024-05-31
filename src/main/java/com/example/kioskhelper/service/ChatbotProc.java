@@ -29,9 +29,9 @@ import javax.crypto.spec.SecretKeySpec;
 @RequiredArgsConstructor
 public class ChatbotProc {
     @Value("${chatbot.api.url}")
-    String apiURL;
+    private String apiURL;
     @Value("${chatbot.api.key}")
-    String secretKey;
+   private String secretKey;
 
     private final ChatService chatService;
 
@@ -92,8 +92,8 @@ public class ChatbotProc {
 
         // Update the last active time for the current session
         sessionLastActive.put(userId, System.currentTimeMillis());
-        chatService.saveChat(user, userId, voiceMessage, chatbotMessage);
-        return chatbotMessage;
+
+        return chatService.saveChat(user, userId, voiceMessage, chatbotMessage);
     }
 
     private String resetSession(String oldUserId) {

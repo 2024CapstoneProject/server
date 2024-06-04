@@ -100,7 +100,8 @@ public class ChatGPTService {
         }
         else if(userMessage.contains("맥도날드")||Menu.contains(userMessage,"맥도날드"))
         {
-            return ChatbotResponse.Mc.getKey();
+            return "맥도날드 카테고리 별 메뉴를 먼저 소개할게\n\n" +getMenu("src/main/resources/맥도날드메뉴.json").toString()+"\n"
+                    + ChatbotResponse.Mc.getKey();
         }
         else if(userMessage.contains("메가커피")||(userMessage.contains("메가 커피")))
         {

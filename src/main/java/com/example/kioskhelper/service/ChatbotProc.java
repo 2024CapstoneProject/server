@@ -42,7 +42,7 @@ public class ChatbotProc {
 
 
 
-    public String sendMessage(User user, String voiceMessage, boolean reset) {
+    public String sendMessage(User user, String voiceMessage, boolean reset) throws IOException {
         String userId = user.getUid();
 
         if (reset) {

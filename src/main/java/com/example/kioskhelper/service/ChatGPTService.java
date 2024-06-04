@@ -7,6 +7,7 @@ import com.example.kioskhelper.domain.etc.ChatbotResponse;
 import com.example.kioskhelper.domain.etc.Menu;
 import com.example.kioskhelper.repository.ChatRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,7 +38,8 @@ public class ChatGPTService {
     private final ChatRepository chatRepository;
 
 
-   public String getBotResponse(String userMessage, User user) {
+
+   public String getBotResponse(String userMessage, User user) throws IOException {
 
 
     List<Chat> recentMessages = chatRepository.findRecentChatsByUserIdAndExpiredFalse(user, PageRequest.of(0, 5));
@@ -88,7 +93,7 @@ public class ChatGPTService {
     return botMessage;
 }
 
-    private String extractKeywords(String userMessage) {
+    private String extractKeywords(String userMessage) throws IOException {
         // Simple keyword extraction logic (can be replaced with a more sophisticated NLP model)
         if (userMessage.contains("버거킹")||Menu.contains(userMessage,"버거킹")) {
             return ChatbotResponse.BurgerKing.getKey();
@@ -96,6 +101,13 @@ public class ChatGPTService {
         else if(userMessage.contains("맥도날드")||Menu.contains(userMessage,"맥도날드"))
         {
             return ChatbotResponse.Mc.getKey();
+        }
+        else if(userMessage.contains("메가커피")||(userMessage.contains("메가 커피")))
+        {
+            //res/MegaCoffie.json을 참고하여 메가커피 메뉴를 추가해주세요
+
+            return "메가커피 카테고리 별 메뉴를 먼저 소개할게 \n\n"+getMenu("src/main/resources/MegaCoffie.json").toString()+"\n"+
+                    ChatbotResponse.MEGAMenu.getKey();
         }
 
         return ChatbotResponse.Normal.getKey();
@@ -126,6 +138,13 @@ public class ChatGPTService {
 
     public List<Chat> getChatHistory() {
         return chatRepository.findAll();
+    }
+
+    private JsonNode getMenu(String path) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        byte[] jsonData = Files.readAllBytes(new File(path).toPath());
+        return objectMapper.readTree(jsonData);
+
     }
 
 }

@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.example.kioskhelper.auth.utils.AuthUtils.getAuthenticatedUser;
@@ -41,7 +42,7 @@ public class ChatController {
     // 실제 구현에서는 이 부분에 챗봇 서비스를 연동하십시오.
     @GetMapping("/ask")
     public ResponseEntity<ChatResponse> askChatbot(@RequestParam String question,
-                                                   @RequestParam(value ="reset", defaultValue = "false") boolean reset) {
+                                                   @RequestParam(value ="reset", defaultValue = "false") boolean reset) throws IOException {
 
         if(question.equals("true")
         ){

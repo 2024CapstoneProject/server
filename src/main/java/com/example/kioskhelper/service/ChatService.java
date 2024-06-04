@@ -8,6 +8,7 @@ import com.example.kioskhelper.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -20,7 +21,7 @@ public class ChatService {
 
     private String answer="이 챗봇은 카페, 맥도날드, 버거킹 키오스크와 관련된 챗봇입니다.";
 
-    public String saveChat(User user,String sessionId, String voiceMessage, String chatbotMessage) {
+    public String saveChat(User user,String sessionId, String voiceMessage, String chatbotMessage) throws IOException {
 
 
        if(chatbotMessage.contains(answer))

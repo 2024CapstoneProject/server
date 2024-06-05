@@ -110,6 +110,12 @@ public class ChatGPTService {
             return "메가커피 카테고리 별 메뉴를 먼저 소개할게 \n\n"+getMenu("src/main/resources/MegaCoffie.json").toString()+"\n"+
                     ChatbotResponse.MEGAMenu.getKey();
         }
+        else if(userMessage.contains("롯데리아"))
+        {
+            //res/LotteRia.json을 참고하여 롯데리아 메뉴를 추가해주세요
+            return "롯데리아 카테고리 별 메뉴를 먼저 소개할게 \n\n"+getMenu("src/main/resources/롯데리아메뉴.json").toString()+"\n"+
+                    ChatbotResponse.Lotte.getKey();
+        }
 
         return ChatbotResponse.Normal.getKey();
     }

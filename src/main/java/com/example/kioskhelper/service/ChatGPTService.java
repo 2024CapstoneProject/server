@@ -110,11 +110,17 @@ public class ChatGPTService {
             return "메가커피 카테고리 별 메뉴를 먼저 소개할게 \n\n"+getMenu("src/main/resources/MegaCoffie.json").toString()+"\n"+
                     ChatbotResponse.MEGAMenu.getKey();
         }
-        else if(userMessage.contains("롯데리아"))
-        {
+        else if(userMessage.contains("롯데리아")) {
             //res/LotteRia.json을 참고하여 롯데리아 메뉴를 추가해주세요
-            return "롯데리아 카테고리 별 메뉴를 먼저 소개할게 \n\n"+getMenu("src/main/resources/롯데리아메뉴.json").toString()+"\n"+
+            return "롯데리아 카테고리 별 메뉴를 먼저 소개할게 \n\n" + getMenu("src/main/resources/롯데리아메뉴.json").toString() + "\n" +
                     ChatbotResponse.Lotte.getKey();
+        }else if(userMessage.contains("맘스터치")) {
+            //res/Momstouch.json을 참고하여 맘스터치 메뉴를 추가해주세요
+            return "맘스터치 카테고리 별 메뉴를 먼저 소개할게 \n\n" + getMenu("src/main/resources/맘스터치메뉴.json").toString() + "\n" +
+                    ChatbotResponse.Momstouch.getKey();
+        }else if(userMessage.contains("효자손")||userMessage.contains("나는컴공"))
+        {
+            return ChatbotResponse.Introduction.getKey();
         }
 
         return ChatbotResponse.Normal.getKey();

@@ -6,9 +6,9 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
   datasource:
-    url: jdbc:postgresql://118.67.135.211:5432/kiosk
-    username: kiosk
-    password: zpshrzzang
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate.ddl-auto: update
@@ -16,7 +16,7 @@ spring:
     show-sql: false
 
 openai-service:
-  api-key: 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
+  api-key: ${OPENAI_API_KEY}
   gpt-model: gpt-3.5-turbo
   audio-model: whisper-1
   http-client:
@@ -45,7 +45,7 @@ springdoc:
     disabled: true
 chatbot:
   api:
-    url: ${chatbot.api.url}
-    key: ${chatbot.api.key}
+    url: ${CHATBOT_API_URL}
+    key: ${CHATBOT_API_KEY}
 secret:
-  key: ${secret.key}
+  key: ${SECRET_KEY}

@@ -8,6 +8,14 @@ services:
       context: .
       dockerfile: Dockerfile.Backend
     container_name: kiosk-backend-1
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      CHATBOT_API_URL: ${CHATBOT_API_URL}
+      CHATBOT_API_KEY : ${CHATBOT_API_KEY}
+      SECRET_KEY: ${SECRET_KEY}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_URL: ${DB_URL}
     ports:
       - "9000:9000"
     volumes:
@@ -18,4 +26,20 @@ services:
       - ./gradlew.bat:/app/gradlew.bat
       - ./build.gradle:/app/build.gradle
       - ./settings.gradle:/app/settings.gradle
-    command: /bin/sh -c "while true; do sleep 30; done"
+    restart: always
+    depends_on:
+      - postgresql
+    #command: /bin/sh -c "while true; do sleep 30; done"
+  postgresql:
+    image: postgres:latest
+    container_name: kiosk-postgresql-1
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_DB_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql/data
+      - ./postgresql/backup:/backup

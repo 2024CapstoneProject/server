@@ -76,7 +76,7 @@ public class ChatGPTService {
 
     // Create request payload
     Map<String, Object> payload = Map.of(
-            "model", "gpt-3.5-turbo",
+            "model", "gpt-4o-mini",
             "messages", messages
     );
 
